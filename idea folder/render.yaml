@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: jadhum-fishing-equipments
+    runtime: python
+    plan: 0.5c-512mb
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 1 --threads 4
+    healthCheckPath: /api/products
+    disk:
+      name: jadhum-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: HOST
+        value: 0.0.0.0
+      - key: COOKIE_SECURE
+        value: "1"
+      - key: DATABASE_PATH
+        value: /var/data/quotations.sqlite
+      - key: ADMIN_PASSWORD
+        sync: false
